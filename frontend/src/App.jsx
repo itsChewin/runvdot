@@ -8,6 +8,11 @@ function App() {
 
   return (
     <>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <button className="bg-orange-500 text-white px-6 py-2 rounded-full">
+        Tailwind Works!
+      </button>
+    </div>
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -22,7 +27,7 @@ function App() {
           count is {count}
         </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
       <p className="read-the-docs">
