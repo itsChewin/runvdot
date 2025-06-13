@@ -1,5 +1,3 @@
 export default function SignIn() {
-  return (
-    <div className="text-center text-2xl mt-20">SignIn Page</div>
-  );
+  return <h1 className="text-2xl">Sign In</h1>;
 }

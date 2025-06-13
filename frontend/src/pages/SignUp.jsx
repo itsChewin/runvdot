@@ -1,5 +1,3 @@
 export default function SignUp() {
-  return (
-    <div className="text-center text-2xl mt-20">SignUp Page</div>
-  );
+  return <h1 className="text-2xl">Sign Up</h1>;
 }
