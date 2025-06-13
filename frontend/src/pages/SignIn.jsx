@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +28,7 @@ export default function SignIn() {
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-1/3 -translate-y-1/2 text-sm text-gray-600 hover:text-black"
             >
-              {showPassword ? "Hide" : "Show"}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
 
