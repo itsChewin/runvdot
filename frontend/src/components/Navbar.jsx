@@ -16,6 +16,7 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-8 text-lg font-medium">
+          <Link to="/" className="hover:text-white transition">Home</Link>
           <Link to="/calculator" className="hover:text-white transition">Calculator</Link>
           <Link to="/history" className="hover:text-white transition">History</Link>
           <Link to="/signin" className="hover:text-white transition"> Login </Link>
@@ -23,7 +24,7 @@ export default function Navbar() {
 
         {/* Hamburger (Mobile) */}
         <button
-          className="md:hidden text-white text-2xl"
+          className="md:hidden text-orange-500 text-2xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           ☰
@@ -33,6 +34,7 @@ export default function Navbar() {
       {/* Mobile Dropdown */}
       {menuOpen && (
         <div className="md:hidden bg-black px-6 pb-4 flex flex-col gap-4 text-lg font-medium">
+          <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-white">Home</Link>
           <Link to="/calculator" onClick={() => setMenuOpen(false)} className="hover:text-white">Calculator</Link>
           <Link to="/history" onClick={() => setMenuOpen(false)} className="hover:text-white">History</Link>
           <Link to="/signin" onClick={() => setMenuOpen(false)} className="hover:text-white">Login</Link>
