@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function SignIn() {
   const [email, setEmail] = useState(""); // use "email" not username
@@ -9,21 +10,20 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      await axios.post("http://localhost:8000/api/login", {
-        email,
+      const res = await axios.post("http://localhost:8000/api/login", {
+        email, // Laravel expects email
         password,
       });
 
-      // Optional: store user info or token
-      // localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      navigate("/calculator");
+      login(res.data.user);
+      navigate("/");
     } catch (err) {
       setError(
         err.response?.data?.message || "Login failed. Please try again."
