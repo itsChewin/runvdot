@@ -1,28 +1,59 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "axios";
 
 export default function SignIn() {
+  const [email, setEmail] = useState(""); // use "email" not username
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      await axios.post("http://localhost:8000/api/login", {
+        email,
+        password,
+      });
+
+      // Optional: store user info or token
+      // localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      navigate("/calculator");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-grayBg flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-6 text-black">
           Sign In
         </h2>
-        <form>
+        <form onSubmit={handleLogin}>
           <input
-            type="text"
-            placeholder="Username"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full mb-4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange placeholder-gray-400"
           />
 
           <div className="relative mb-4">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className="w-full mb-4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange placeholder-gray-400"
-          />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full mb-4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange placeholder-gray-400"
+            />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
@@ -32,13 +63,15 @@ export default function SignIn() {
             </button>
           </div>
 
+          {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+
           <div className="flex justify-center mt-1">
-            <Link
-              to="/calculator"
+            <button
+              type="submit"
               className="inline-block bg-orange text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition"
             >
               Login
-            </Link>
+            </button>
           </div>
         </form>
         <p className="text-center mt-4 text-sm text-gray-600">
