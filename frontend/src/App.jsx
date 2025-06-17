@@ -6,9 +6,11 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Calculator from "./pages/Calculator";
 import History from "./pages/History";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
+    
     <Router>
       <Navbar />
       <Routes>
@@ -32,6 +34,7 @@ export default function App() {
           }
         />
       </Routes>
+      <Toaster position="top-center" />
     </Router>
   );
 }

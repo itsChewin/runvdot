@@ -3,9 +3,10 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 export default function SignIn() {
-  const [email, setEmail] = useState(""); // use "email" not username
+  const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -16,9 +17,16 @@ export default function SignIn() {
     e.preventDefault();
     setError(null);
 
+    if (!email || !password) {
+      toast.error("Please enter both email and password.");
+      return;
+    }
+    
+    toast.success("Signing in successfully!");
+
     try {
       const res = await axios.post("http://localhost:8000/api/login", {
-        email, // Laravel expects email
+        email, 
         password,
       });
 
@@ -28,6 +36,12 @@ export default function SignIn() {
       setError(
         err.response?.data?.message || "Login failed. Please try again."
       );
+      
+      if (err.response?.status === 401) {
+      toast.error("Invalid credentials. Please check your email and password.");
+    } else {
+      toast.error("Login failed. Try again later.");
+    }
     }
   };
 

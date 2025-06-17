@@ -2,10 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");              // NEW
+  const [email, setEmail] = useState("");             
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,16 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    if (!username || !email || !password || !confirmPassword) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword)
+    toast.success("Account created! You can now sign in.");
+    
+  toast.error("Passwords do not match.");
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
