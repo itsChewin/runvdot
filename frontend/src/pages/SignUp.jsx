@@ -23,12 +23,15 @@ export default function SignUp() {
       return;
     }
 
-    if (password !== confirmPassword)
-    toast.success("Account created! You can now sign in.");
+    if (password == confirmPassword) {
+      toast.success("Account created! You can now sign in.");
+    }
+   
     
-  toast.error("Passwords do not match.");
+    
 
     if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
       setError("Passwords do not match.");
       return;
     }

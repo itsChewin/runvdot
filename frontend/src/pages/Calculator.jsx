@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import vdotTable from "../data/vdotTable.json";
 import vdotTrainingPaces from "../data/vdot_training_paces.json";
+import axios from "axios";
 
 export default function Calculator() {
   const [distance, setDistance] = useState("");
@@ -63,50 +64,92 @@ export default function Calculator() {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
-useEffect(() => {
-  if (time && distance) {
-    const timeSec = parseTime(time);
-    let distKm =
-      distance === "5k"
-        ? 5
-        : distance === "10k"
-        ? 10
-        : distance === "half"
-        ? 21.0975
-        : distance === "full"
-        ? 42.195
-        : 0;
+  useEffect(() => {
+    if (time && distance) {
+      const timeSec = parseTime(time);
+      let distKm =
+        distance === "5k"
+          ? 5
+          : distance === "10k"
+          ? 10
+          : distance === "half"
+          ? 21.0975
+          : distance === "full"
+          ? 42.195
+          : 0;
 
-    if (timeSec > 0 && distKm > 0) {
-      const pacePerKm = timeSec / distKm;
-      const pacePerMi = pacePerKm * 1.60934;
+      if (timeSec > 0 && distKm > 0) {
+        const pacePerKm = timeSec / distKm;
+        const pacePerMi = pacePerKm * 1.60934;
 
-      const selectedPace =
-        unit === "km" ? formatPace(pacePerKm) : formatPace(pacePerMi);
-      setPace(selectedPace);
+        const selectedPace =
+          unit === "km" ? formatPace(pacePerKm) : formatPace(pacePerMi);
+        setPace(selectedPace);
+      }
     }
-  }
-}, [time, distance, unit]); 
+  }, [time, distance, unit]);
 
-const handleTimeChange = (e) => {
-  let input = e.target.value.replace(/[^\d]/g, ""); // remove non-digits
-  if (input.length > 6) input = input.slice(0, 6); // limit to 6 digits
+  const handleTimeChange = (e) => {
+    let input = e.target.value.replace(/[^\d]/g, ""); // remove non-digits
+    if (input.length > 6) input = input.slice(0, 6); // limit to 6 digits
 
-  // Auto-insert colons
-  let formatted = input;
-  if (input.length >= 5) {
-    formatted = `${input.slice(0, 2)}:${input.slice(2, 4)}:${input.slice(4, 6)}`;
-  } else if (input.length >= 3) {
-    formatted = `${input.slice(0, 2)}:${input.slice(2, 4)}`;
-  }
+    // Auto-insert colons
+    let formatted = input;
+    if (input.length >= 5) {
+      formatted = `${input.slice(0, 2)}:${input.slice(2, 4)}:${input.slice(
+        4,
+        6
+      )}`;
+    } else if (input.length >= 3) {
+      formatted = `${input.slice(0, 2)}:${input.slice(2, 4)}`;
+    }
 
-  setTime(formatted);
-};
+    setTime(formatted);
+  };
 
   const handlePaceChange = (e) => {
     const input = e.target.value;
     const valid = /^(\d{0,2}:)?(\d{0,2})?$/.test(input);
     if (valid) setPace(input);
+  };
+
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("You must be logged in to save.");
+      return;
+    }
+
+ let numericDistance =
+  distance === "5k"
+    ? 5
+    : distance === "10k"
+    ? 10
+    : distance === "half"
+    ? 21.0975
+    : distance === "full"
+    ? 42.195
+    : 0;
+
+const data = {
+  distance: numericDistance,
+  time,
+  vdot,
+};
+
+    try {
+await axios.post("http://localhost:8000/api/vdot-history", data, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+    Accept: "application/json",
+  },
+});
+      alert("Saved successfully!");
+    } catch (error) {
+      console.error("Failed to save VDOT:", error);
+      alert("Error saving data.");
+    }
   };
 
   const training = vdotTrainingPaces.find((row) => row.vdot === vdot);
@@ -173,6 +216,12 @@ const handleTimeChange = (e) => {
             Reset
           </button>
         </div>
+        <button
+          className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          onClick={handleSave}
+        >
+          Save
+        </button>
       </div>
 
       {training && (
