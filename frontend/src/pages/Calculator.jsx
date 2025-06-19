@@ -215,13 +215,13 @@ await axios.post("http://localhost:8000/api/vdot-history", data, {
           >
             Reset
           </button>
+           <button
+            className="text-gray-400 px-4 py-2  hover:text-black transition bg-green-500 text-white rounded hover:bg-green-600"
+            onClick={handleSave}
+          >
+            Save
+          </button>
         </div>
-        <button
-          className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          onClick={handleSave}
-        >
-          Save
-        </button>
       </div>
 
       {training && (
