@@ -24,6 +24,9 @@ WORKDIR /var/www
 # Copy existing application
 COPY . /var/www
 
+# 🧩 Install PHP dependencies
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
 # Set file permissions
 RUN chown -R www-data:www-data /var/www
 
