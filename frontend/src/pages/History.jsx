@@ -51,7 +51,7 @@ export default function History() {
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:8000/api/vdot-history/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/vdot-history/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
