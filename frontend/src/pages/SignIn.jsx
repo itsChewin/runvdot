@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 
 export default function SignIn() {
-  const [email, setEmail] = useState(""); 
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -14,39 +14,44 @@ export default function SignIn() {
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setError(null);
+    e.preventDefault();
+    setError(null);
 
-  if (!email || !password) {
-    toast.error("Please enter both email and password.");
-    return;
-  }
-
-  toast.success("Signing in successfully!");
-
-  try {
-    const res = await axios.post("http://localhost:8000/api/login", {
-      email,
-      password,
-    });
-
-    // ✅ Save token to localStorage
-    localStorage.setItem("token", res.data.token);
-
-    login(res.data.user); // this is your context login
-    navigate("/");
-  } catch (err) {
-    setError(
-      err.response?.data?.message || "Login failed. Please try again."
-    );
-
-    if (err.response?.status === 401) {
-      toast.error("Invalid credentials. Please check your email and password.");
-    } else {
-      toast.error("Login failed. Try again later.");
+    if (!email || !password) {
+      toast.error("Please enter both email and password.");
+      return;
     }
-  }
-};
+
+    toast.success("Signing in successfully!");
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/login`,
+        {
+          email,
+          password,
+        }
+      );
+
+      // ✅ Save token to localStorage
+      localStorage.setItem("token", res.data.token);
+
+      login(res.data.user); // this is your context login
+      navigate("/");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+
+      if (err.response?.status === 401) {
+        toast.error(
+          "Invalid credentials. Please check your email and password."
+        );
+      } else {
+        toast.error("Login failed. Try again later.");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-grayBg flex items-center justify-center">

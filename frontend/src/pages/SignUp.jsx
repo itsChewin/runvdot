@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");             
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,9 +26,6 @@ export default function SignUp() {
     if (password == confirmPassword) {
       toast.success("Account created! You can now sign in.");
     }
-   
-    
-    
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match.");
@@ -37,7 +34,7 @@ export default function SignUp() {
     }
 
     try {
-      await axios.post("http://localhost:8000/api/register", {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/register`, {
         name: username,
         email: email,
         password: password,
@@ -47,9 +44,9 @@ export default function SignUp() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        (err.response?.data?.errors &&
-          Object.values(err.response.data.errors)[0][0]) || 
-        "Registration failed."
+          (err.response?.data?.errors &&
+            Object.values(err.response.data.errors)[0][0]) ||
+          "Registration failed."
       );
     }
   };
