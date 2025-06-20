@@ -9,7 +9,7 @@ export default function History() {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("http://localhost:8000/api/user", {
+        .get(`${import.meta.env.VITE_API_BASE_URL}/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -28,7 +28,7 @@ export default function History() {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/vdot-history",
+          `${import.meta.env.VITE_API_BASE_URL}/vdot-history`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

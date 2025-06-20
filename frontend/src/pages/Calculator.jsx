@@ -121,30 +121,34 @@ export default function Calculator() {
       return;
     }
 
- let numericDistance =
-  distance === "5k"
-    ? 5
-    : distance === "10k"
-    ? 10
-    : distance === "half"
-    ? 21.0975
-    : distance === "full"
-    ? 42.195
-    : 0;
+    let numericDistance =
+      distance === "5k"
+        ? 5
+        : distance === "10k"
+        ? 10
+        : distance === "half"
+        ? 21.0975
+        : distance === "full"
+        ? 42.195
+        : 0;
 
-const data = {
-  distance: numericDistance,
-  time,
-  vdot,
-};
+    const data = {
+      distance: numericDistance,
+      time,
+      vdot,
+    };
 
     try {
-await axios.post("http://localhost:8000/api/vdot-history", data, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-    Accept: "application/json",
-  },
-});
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/vdot-history`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
       alert("Saved successfully!");
     } catch (error) {
       console.error("Failed to save VDOT:", error);
@@ -215,7 +219,7 @@ await axios.post("http://localhost:8000/api/vdot-history", data, {
           >
             Reset
           </button>
-           <button
+          <button
             className="text-gray-400 px-4 py-2  hover:text-black transition bg-green-500 text-white rounded hover:bg-green-600"
             onClick={handleSave}
           >
