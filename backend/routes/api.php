@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->group(function () {
     return response()->json(['message' => 'CORS is working!']);
 });
 
+
